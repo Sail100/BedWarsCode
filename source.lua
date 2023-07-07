@@ -2,6 +2,9 @@
 local placeID = game.PlaceId
 local DuelsCombatSection = CombatTabDuels:NewSection("Combat")
 local DuelsBlantantSection = BlatantTabDuels:NewSection("Blantant")
+local DuelsUl = UtilityTabDuels:NewSection:NewSection("Utility")
+local DuelsWorld = WorldTabDuels:NewSection:NewSection("World")
+
 local InputService = game:GetService("UserInputService")
 local playersService = game:GetService("Players")
 local lplr = playersService.LocalPlayer
@@ -218,25 +221,21 @@ end
 -- Lobby
 local CombatTabLobby = LobbyWindow:NewTab("Combat")
 local BlatantTabLobby = LobbyWindow:NewTab("Blantant")
-local RenderTabLobby = LobbyWindow:NewTab("Render")
 local UtilityTabLobby = LobbyWindow:NewTab("Utility")
 local WorldTabLobby = LobbyWindow:NewTab("World")
 -- Duels or Solos--
 local CombatTabDuels = GameWin1:NewTab("Combat")
-local BlatantTabDuels = GameWin1:NewTab("Blantant")
 local RenderTabDuels = GameWin1:NewTab("Render")
 local UtilityTabDuels = GameWin1:NewTab("Utility")
 local WorldTabDuels = GameWin1:NewTab("World")
 --Bedwars Doubles, Squads, LuckyBlock Squads, LuckyBlock Doubles, SkyWars Doubles
 local CombatTabDoubles = GameWin2:NewTab("Combat")
 local BlatantTabDoubles = GameWin2:NewTab("Blantant")
-local RenderTabDoubles = GameWin2:NewTab("Render")
 local UtilityTabDoubles = GameWin2:NewTab("Utility")
 local WorldTabDoubles = GameWin2:NewTab("World")
 -- 30v30
 local CombatTab = GameWin3:NewTab("Combat")
 local BlatantTab  = GameWin3:NewTab("Blantant")
-local RenderTab = GameWin3:NewTab("Render")
 local UtilityTab = GameWin3:NewTab("Utility")
 local WorldTab = GameWin3:NewTab("World")
 -- Game Checker --
@@ -302,7 +301,7 @@ end)
 
    local InfiniteJumpConnection
    local InfJump = true
-   Section:NewToggle("Inf Jump", "Keep jumping.", function(state)
+   DuelsBlantantSection:NewToggle("Inf Jump", "Keep jumping.", function(state)
     if state then
         spawn(function()
     			InfiniteJumpConnection = InputService.JumpRequest:connect(function(jump)
@@ -316,7 +315,174 @@ end)
     end
 end)
 
+
+local KillauraNoSwing = {Enabled = false}
+	local KillauraNoSound = {Enabled = false}
+	local killaurarange = {Value = 23}
+	local Killaura = {Enabled = false}
+	local killauraremote = bedwars.ClientHandler:Get(bedwars.AttackRemote)
+	local function attackEntity(plr)
+		local root = plr.Character.HumanoidRootPart
+		if not root then
+			return nil
+		end
+		local selfrootpos = lplr.Character.HumanoidRootPart.Position
+		local selfpos = selfrootpos + (killaurarange.Value > 14 and (selfrootpos - root.Position).magnitude > 14 and (CFrame.lookAt(selfrootpos, root.Position).lookVector * 4) or Vector3.zero)
+		local sword = getCurrentSword()
+		killauraremote:SendToServer({
+			["weapon"] = sword ~= nil and sword.tool,
+			["entityInstance"] = plr.Character,
+			["validate"] = {
+				["raycast"] = {
+					["cameraPosition"] = hashvec(cam.CFrame.Position),
+					["cursorDirection"] = hashvec(Ray.new(cam.CFrame.Position, root.CFrame.Position).Unit.Direction)
+				},
+				["targetPosition"] = hashvec(root.CFrame.Position),
+				["selfPosition"] = hashvec(selfpos)
+			},
+			["chargedAttack"] = {
+				["chargeRatio"] = 0}
+		})
+		if not KillauraNoSwing.Enabled then
+			if Killaura.Enabled then
+				playAnimation("rbxassetid://4947108314")
+			end
+		end
+		if not KillauraNoSound.Enabled then
+			if Killaura.Enabled then
+				playSound("rbxassetid://6760544639", 0.5)
+			end
+		end
+	end
+DuelsBlantantSection:NewToggle("Killaura", "u should know", function(state)
+    if state then
+       RunLoops:BindToHeartbeat("Killaura", 1, function()
+					local plrs = GetAllNearestHumanoidToPosition(killaurarange.Value - 0.0001, 1)
+					SwitchTool(getCurrentSword().tool)
+					for i,plr in pairs(plrs) do
+						task.spawn(attackEntity, plr)
+					end
+				end) 
+    else
+        RunLoops:UnbindFromHeartbeat("Killaura")
+    end
+end)
+DuelsBlantantSection:NewToggle("NoFall", "", function(state)
+    if state then
+       task.spawn(function()
+					repeat
+						task.wait()
+						game:GetService("ReplicatedStorage").rbxts_include.node_modules["@rbxts"].net.out._NetManaged.GroundHit:FireServer()
+					until (not NoFall.Enabled)
+				end) 
+    else
+        print("E")
+    end
+end)
+
+local antivoidpart
+	local antivoidconnection
+	local antivoiding = false
+	local antitransparent = {Value = 50}
+	local anticolor = {["Hue"] = 0.44, ["Sat"] = 1, ["Value"] = 1}
+	local AntiVoid = {Enabled = false}
+      DuelsUl:NewToggle("AntiVoid", "", function(state)
+    if state then
+					task.spawn(function()
+			
+					antivoidpart = Instance.new("Part")
+					antivoidpart.CanCollide = false
+					antivoidpart.Size = Vector3.new(10000, 1, 10000)
+					antivoidpart.Anchored = true
+					antivoidpart.Material = Enum.Material.Neon
+					antivoidpart.Color = Color3.fromHSV(anticolor["Hue"], anticolor["Sat"], anticolor["Value"])
+					antivoidpart.Transparency = 1 - (antitransparent.Value / 100)
+					antivoidpart.Position = lplr.Character.HumanoidRootPart.Position - Vector3.new(0, 21, 0)
+					antivoidpart.Parent = workspace
+					antivoidconnection = antivoidpart.Touched:Connect(function(touched)
+						if touched.Parent == lplr.Character and isAlive(lplr) then
+							if (not antivoiding) and lplr.Character.Humanoid.Health > 0 then
+								antivoiding = true
+								lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0, 150, 0)
+								antivoiding = false
+							end
+						end
+					end)
+    else
+        if antivoidconnection then antivoidconnection:Disconnect() end
+					if antivoidpart then
+						antivoidpart:Remove()
+    end
+end)
+	
+local params = RaycastParams.new()
+  params.IgnoreWater = true
+  function BreakFunction(part)
+    local raycastResult = game:GetService("Workspace"):Raycast(part.Position + Vector3.new(0,24,0),Vector3.new(0,-27,0),params)
+    if raycastResult then
+      local targetblock = raycastResult.Instance
+      for i,v in pairs(targetblock:GetChildren()) do
+        if v:IsA("Texture") then
+          v:Destroy()
+        end
+      end
+      replicatedStorageService.rbxts_include.node_modules["@easy-games"]["block-engine"].node_modules["@rbxts"].net.out._NetManaged.DamageBlock:InvokeServer({
+        ["blockRef"] = {
+          ["blockPosition"] = Vector3.new(math.round(targetblock.Position.X/3),math.round(targetblock.Position.Y/3),math.round(targetblock.Position.Z/3))
+        },
+        ["hitPosition"] = Vector3.new(math.round(targetblock.Position.X/3),math.round(targetblock.Position.Y/3),math.round(targetblock.Position.Z/3)),
+        ["hitNormal"] = Vector3.new(math.round(targetblock.Position.X/3),math.round(targetblock.Position.Y/3),math.round(targetblock.Position.Z/3))
+      })
+    end
+  end
+  function GetBeds()
+    local beds = {}
+    for i,v in pairs(game:GetService("Workspace"):GetChildren()) do
+      if string.lower(v.Name) == "bed" and v:FindFirstChild("Covers") ~= nil and v:FindFirstChild("Covers").BrickColor ~= lplr.Team.TeamColor then
+        table.insert(beds,v)
+      end
+    end
+    return beds
+  end
+  local BreakerRange = {Value = 30}
+  local Breaker = {Enabled = false}
+DuelsWorld:NewToggle("Nuker", "Breaks beds.", function(state)
+    if state then
+        task.spawn(function()
+          while task.wait() do
+            if not Breaker.Enabled then return end
+            task.spawn(function()
+              if lplr:GetAttribute("DenyBlockBreak") == true then
+                lplr:SetAttribute("DenyBlockBreak",nil)
+              end
+            end)
+            if isAlive() then
+              local beds = GetBeds()
+              for i,v in pairs(beds) do
+                local mag = (v.Position - lplr.Character.PrimaryPart.Position).Magnitude
+                if mag < BreakerRange.Value then
+                  BreakFunction(v)
+                end
+              end
+            end
+          end
+        end)
+    else
+        print("Toggle Off")
+    end
+end)
+
 --Bedwars Doubles, Squads, LuckyBlock Squads, LuckyBlock Doubles, SkyWars Doubles
 
 
 -- 30v30
+
+spawn(function()
+	repeat
+	  wait(0.5)
+		writefile("BedWarsScript/Profiles/6872274481.json",game:GetService("HttpService"):JSONEncode(Settings))
+	until false
+end)
+local suc, res = pcall(function()
+	return game:GetService("HttpService"):JSONDecode(readfile("Nightbed/Profiles/6872274481.json"))
+end)
