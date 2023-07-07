@@ -484,5 +484,5 @@ spawn(function()
 	until false
 end)
 local suc, res = pcall(function()
-	return game:GetService("HttpService"):JSONDecode(readfile("Nightbed/Profiles/6872274481.json"))
+	return game:GetService("HttpService"):JSONDecode(readfile("BedWarsScript/Profiles/6872274481.json"))
 end)
