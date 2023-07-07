@@ -249,8 +249,10 @@ local GamesSupported = {
 
 -- Code --
 
--- Lobby
+-- Lobby --
 
+
+-- Add sprint and ESP.
 -- Duels or Solos
 local func
 local func2
