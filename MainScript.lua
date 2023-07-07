@@ -12,7 +12,7 @@ shared.funcslib = FunctionsLibrary
 local queueteleport = queue_on_teleport
 
 local TeleportString = [[
-  loadstring(game:HttpGet("", true))
+  loadstring(game:HttpGet("https://github.com/Sail100/BedWarsCode/blob/main/MainScript.lua", true))
 ]]
 
 queueteleport(TeleportString)
