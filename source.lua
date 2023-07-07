@@ -1,9 +1,7 @@
 -- Vars--
 local placeID = game.PlaceId
-local DuelsCombatSection = CombatTabDuels:NewSection("")
-
-
-
+local DuelsCombatSection = CombatTabDuels:NewSection("Combat")
+local DuelsBlantantSection = BlatantTabDuels:NewSection("Blantant")
 local InputService = game:GetService("UserInputService")
 local playersService = game:GetService("Players")
 local lplr = playersService.LocalPlayer
