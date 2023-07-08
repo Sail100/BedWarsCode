@@ -47,7 +47,7 @@ if isfolder("BedwarsCode/CustomModules") == false then
 end
 
 function MainLoaded()
-  local customModuleURL = ""..game.PlaceId..".lua"
+  local customModuleURL = "https://github.com/Sail100/BedWarsCode/tree/main/CustomModules/"..game.PlaceId..".lua"
   local customModuleScript = game:HttpGet(customModuleURL, true)
   if customModuleScript then
     local success, error = pcall(function()
@@ -64,12 +64,12 @@ end
 
 --[[
 function MainLoaded()
-  if game:HttpGet("https://raw.githubusercontent.com/NTDCore/NightbedForRoblox/main/CustomModules/"..game.PlaceId..".lua") then
-  	loadstring(game:HttpGet("https://raw.githubusercontent.com/NTDCore/NightbedForRoblox/main/CustomModules/"..game.PlaceId..".lua", true))()
-  elseif isfile("Nightbed/CustomModules/"..game.PlaceId..".lua") then
-    loadstring(readfile("Nightbed/CustomModules/"..game.PlaceId..".lua"))()
+  if game:HttpGet("https://github.com/Sail100/BedWarsCode/tree/main/CustomModules/"..game.PlaceId..".lua") then
+  	loadstring(game:HttpGet("https://github.com/Sail100/BedWarsCode/tree/main/CustomModules/"..game.PlaceId..".lua", true))()
+  elseif isfile("BedwarsCode/CustomModules/"..game.PlaceId..".lua") then
+    loadstring(readfile("BedwarsCode/CustomModules/"..game.PlaceId..".lua"))()
   else
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/NTDCore/NightbedForRoblox/main/AnyGame.lua"))()
+    loadstring(game:HttpGet("https://github.com/Sail100/BedWarsCode/tree/main/CustomModules/"))()
   end
 end
 --]]
