@@ -439,62 +439,7 @@ local antivoidpart
     end
 end)
 	
-local params = RaycastParams.new()
-  params.IgnoreWater = true
-  function BreakFunction(part)
-    local raycastResult = game:GetService("Workspace"):Raycast(part.Position + Vector3.new(0,24,0),Vector3.new(0,-27,0),params)
-    if raycastResult then
-      local targetblock = raycastResult.Instance
-      for i,v in pairs(targetblock:GetChildren()) do
-        if v:IsA("Texture") then
-          v:Destroy()
-        end
-      end
-      replicatedStorageService.rbxts_include.node_modules["@easy-games"]["block-engine"].node_modules["@rbxts"].net.out._NetManaged.DamageBlock:InvokeServer({
-        ["blockRef"] = {
-          ["blockPosition"] = Vector3.new(math.round(targetblock.Position.X/3),math.round(targetblock.Position.Y/3),math.round(targetblock.Position.Z/3))
-        },
-        ["hitPosition"] = Vector3.new(math.round(targetblock.Position.X/3),math.round(targetblock.Position.Y/3),math.round(targetblock.Position.Z/3)),
-        ["hitNormal"] = Vector3.new(math.round(targetblock.Position.X/3),math.round(targetblock.Position.Y/3),math.round(targetblock.Position.Z/3))
-      })
-    end
-  end
-  function GetBeds()
-    local beds = {}
-    for i,v in pairs(game:GetService("Workspace"):GetChildren()) do
-      if string.lower(v.Name) == "bed" and v:FindFirstChild("Covers") ~= nil and v:FindFirstChild("Covers").BrickColor ~= lplr.Team.TeamColor then
-        table.insert(beds,v)
-      end
-    end
-    return beds
-  end
-  local BreakerRange = {Value = 30}
-  local Breaker = {Enabled = false}
-DuelsWorld:NewToggle("Nuker", "Breaks beds.", function(state)
-    if state then
-        task.spawn(function()
-          while task.wait() do
-            if not Breaker.Enabled then return end
-            task.spawn(function()
-              if lplr:GetAttribute("DenyBlockBreak") == true then
-                lplr:SetAttribute("DenyBlockBreak",nil)
-              end
-            end)
-            if isAlive() then
-              local beds = GetBeds()
-              for i,v in pairs(beds) do
-                local mag = (v.Position - lplr.Character.PrimaryPart.Position).Magnitude
-                if mag < BreakerRange.Value then
-                  BreakFunction(v)
-                end
-              end
-            end
-          end
-        end)
-    else
-        print("Toggle Off")
-    end
-end)
+
 
 --Bedwars Doubles, Squads, LuckyBlock Squads, LuckyBlock Doubles, SkyWars Doubles
 
