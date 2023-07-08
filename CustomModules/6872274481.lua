@@ -261,9 +261,21 @@ local GamesSupported = {
 -- Code --
 
 -- Lobby --
+LobbyCombat:NewToggle("Sprint", "Sprint = true", function(state)
+    if state then
+          task.spawn(function()
+					repeat
+					task.wait()
+					         	if (not bedwars.SprintCont.sprinting) then
+					       		bedwars.SprintCont:startSprinting()
+					      	   end
+				  	until (not Sprint.Enabled)
+	end)
+    else
+        bedwars.SprintCont:stopSprinting()
+    end
+end)
 
-
--- Add sprint and ESP.
 -- Duels or Solos
 local func
 local func2
