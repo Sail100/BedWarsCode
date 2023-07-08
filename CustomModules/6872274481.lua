@@ -1,3 +1,6 @@
+-- Loadstring
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+
 -- Vars--
 local placeID = game.PlaceId
 
@@ -207,9 +210,7 @@ local function getCurrentSword()
 	return sword, swordslot
 end
 
--- Loadstring
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
--- Windows --
+-- Windows
 if placeID == 6872265039 then
  local LobbyWindow = Library.CreateLib("Bedwars -- Lobby", "Ocean")
 end
