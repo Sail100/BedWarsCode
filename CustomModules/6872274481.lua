@@ -7,7 +7,7 @@ local placeID = game.PlaceId
 
 
 
--- Duels
+-- Duels --
 local DuelsCombatSection = CombatTabDuels:NewSection("Combat")
 local DuelsBlantantSection = BlatantTabDuels:NewSection("Blantant")
 local DuelsUl = UiltlityTabDuels:NewSection("Uiltlity")
