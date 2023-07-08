@@ -118,8 +118,7 @@ local KnitClient = debug.getupvalue(require(lplr.PlayerScripts.TS.knit).setup, 6
 		QueueMeta = require(replicatedStorageService.TS.game["queue-meta"]).QueueMeta,
 		SprintCont = KnitClient.Controllers.SprintController,
 		SwordController = KnitClient.Controllers.SwordController
-	}
-end)
+}
 
 local function targetCheck(plr, check)
 	return (check and plr.Character.Humanoid.Health > 0 and plr.Character:FindFirstChild("ForceField") == nil or check == false)
