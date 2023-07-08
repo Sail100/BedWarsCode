@@ -428,9 +428,9 @@ local antivoidpart
 								antivoiding = true
 								lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0, 150, 0)
 								antivoiding = false
-							  end
-							end
-						end
+							   end
+							end)
+						end)
 					end)
     else
         if antivoidconnection then antivoidconnection:Disconnect() end
