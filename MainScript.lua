@@ -16,7 +16,7 @@ shared.SectionsLoaded = Sections
 
 local entityLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/Libraries/entityHandler.lua", true))()
 shared.vapeentity = entityLibrary
-local FunctionsLibrary = loadstring(game:HttpGet("", true))()
+local FunctionsLibrary = loadstring(game:HttpGet("https://github.com/Sail100/BedWarsCode/blob/main/Libraries/FunctionsHandler.lua", true))()
 shared.funcslib = FunctionsLibrary
 
 local queueteleport = queue_on_teleport
