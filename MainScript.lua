@@ -39,7 +39,7 @@ if isfolder("BedWarsCode/Profiles") == false then
   makefolder("BedWarsCode/Profiles")
 end
 local AnyGame = [[
-loadstring(game:HttpGet("https://raw.githubusercontent.com/NTDCore/NightbedForRoblox/main/AnyGame.lua",
+loadstring(game:HttpGet("https://github.com/Sail100/BedWarsCode/blob/main/AnyGame.lua",
 true))()
 ]]
 if isfolder("BedwarsCode/CustomModules") == false then
@@ -47,7 +47,7 @@ if isfolder("BedwarsCode/CustomModules") == false then
 end
 
 function MainLoaded()
-  local customModuleURL = "https://raw.githubusercontent.com/NTDCore/NightbedForRoblox/main/CustomModules/"..game.PlaceId..".lua"
+  local customModuleURL = ""..game.PlaceId..".lua"
   local customModuleScript = game:HttpGet(customModuleURL, true)
   if customModuleScript then
     local success, error = pcall(function()
