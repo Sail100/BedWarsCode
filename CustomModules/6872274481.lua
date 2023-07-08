@@ -434,7 +434,7 @@ local antivoidpart
     else
         if antivoidconnection then antivoidconnection:Disconnect() end
 					if antivoidpart then
-						antivoidpart:Remove()
+	end					antivoidpart:Remove()
     end
 end)
 	
