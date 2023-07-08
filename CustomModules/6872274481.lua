@@ -227,7 +227,8 @@ Sections = {
   ["BreathExploit"] = Tabs["Utility"].CreateSection("BreathExploit"),
   ["PartyExploit"] = Tabs["Utility"].CreateSection("PartyExploit"),
   --["AntiVoid"] = Tabs["World"].CreateSection("AntiVoid"),
-  ["Breaker"] = Tabs["World"].CreateSection("Breaker")
+  ["Breaker"] = Tabs["World"].CreateSection("Breaker"),
+  ["AntiCheatDisabler"] = Tabs["World"].CreateSection("AC Disabler")
 }
 
 local Settings = {
@@ -246,7 +247,8 @@ local Settings = {
 	BreathExploit = false,
 	PartyExploit = false,
 	AntiVoid = false,
-	Breaker = false
+	Breaker = false,
+	AntiCheatDisabler = false
 }
 
 runcode(function()
@@ -443,7 +445,41 @@ runcode(function()
 		HoverText = "Removes the swinging animation."
 	})
 end)
-
+								
+runFunction(function()
+    local AntiCheatDisabler = {Enabled = false}
+    AntiCheatDisabler = Sections["AntiCheatDisabler"].CreateToggle({
+        Name = "AntiCheatDisabler",
+        Function = function(callback)
+            if callback then
+                task.spawn(function()
+                    repeat
+                        task.wait()
+                        local args = {
+                            [1] = {
+                                ["partPositions"] = {
+                                    [1] = Vector3.new(game.entityLibary.character.HumanoidRootPart.CFrame),
+                                    [2] = Vector3.new(game.entityLibary.character.HumanoidRootPart.CFrame),
+                                    [3] = Vector3.new(game.entityLibary.character.HumanoidRootPart.CFrame),
+                                    [4] = Vector3.new(game.entityLibary.character.HumanoidRootPart.CFrame),
+                                    [5] = Vector3.new(game.entityLibary.character.HumanoidRootPart.CFrame),
+                                    [6] = Vector3.new(game.entityLibary.character.HumanoidRootPart.CFrame),
+                                    [7] = Vector3.new(game.entityLibary.character.HumanoidRootPart.CFrame)
+                                },
+                                ["partSize"] = Vector3.new(999999, 0.5, 9999.99999999999999999999)
+                            }
+                        }
+                        
+                        game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SpiritBridgeEnter"):InvokeServer(unpack(args))
+                    until not AntiCheatDisabler.Enabled
+                end)
+            end
+		else
+                    Settings.AntiCheatDisabler = false
+		end												
+        end
+    })
+end								
 runcode(function()
 	local NoFall = {Enabled = false}
 	NoFall = Sections["NoFall"].CreateToggle({
