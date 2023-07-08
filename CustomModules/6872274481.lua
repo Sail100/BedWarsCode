@@ -428,6 +428,7 @@ local antivoidpart
 								antivoiding = true
 								lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0, 150, 0)
 								antivoiding = false
+							  end
 							end
 						end
 					end)
