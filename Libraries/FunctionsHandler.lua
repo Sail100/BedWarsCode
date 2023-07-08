@@ -98,8 +98,8 @@ if shared.FuncsConnect then
 		end
 	end
 	if Functions.executor:find("Krnl") then
-		Functions.RobloxNotification("Detected", "you executor not support for FunctionsHandler\nExecutor: Krnl", 5)
-		Functions.displayErrorPopup("Detected", "you executor not support for FunctionsHandler\nExecutor : Krnl", "OK", {OK = function()
+		Functions.RobloxNotification("Detected", "you executor not support for FunctionsHandler\nExecutor : KRNL", 5)
+		Functions.displayErrorPopup("Detected", "you executor not support for FunctionsHandler\nExecutor : KRNL", "OK", {OK = function()
 		  task.spawn(function()
         repeat
           task.wait()
@@ -139,7 +139,6 @@ if shared.FuncsConnect then
 			Functions.displayErrorPopup("Detected", "You has Been Removed From The Games.", "OK", {OK = function()
 				game:Shutdown()
 			end})
-
 --			game:Shutdown()
 		end
 	end
