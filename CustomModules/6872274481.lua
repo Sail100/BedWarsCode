@@ -8,13 +8,12 @@ local placeID = game.PlaceId
 local DuelsCombatSection = CombatTabDuels:NewSection("Combat")
 local DuelsBlantantSection = BlatantTabDuels:NewSection("Blantant")
 local DuelsUl = UiltlityTabDuels:NewSection("Uiltlity")
-local DuelsWorld = WorldTabDuels:NewSection:NewSection("World")
-
+local DuelsWorld = WorldTabDuels:NewSection("World")
 -- Lobby
 local LobbyCombat = CombatTabLobby:NewSection("Combat")
 local LobbyBlantant = BlatantTabLobby:NewSection("Blantant")
-local LobbyUl = UiltlityTabDuels:NewSection("Uiltlity")
-local LobbyWorld = WorldTabLobby:NewSection("World")
+local LobbyUl = UiltlityTabLobby:NewSection("Uiltlity")
+local LobbyWorld = WorldTabLobby:NewSection("World")LobbyWorld = WorldTabLobby:NewSection("World")
 
 local InputService = game:GetService("UserInputService")
 local playersService = game:GetService("Players")
