@@ -22,7 +22,7 @@ shared.funcslib = FunctionsLibrary
 local queueteleport = queue_on_teleport
 
 local TeleportString = [[
-  loadstring(game:HttpGet("https://raw.githubusercontent.com/NTDCore/NightbedForRoblox/main/MainScript.lua", true))
+  loadstring(game:HttpGet("https://github.com/Sail100/BedWarsCode/blob/main/MainScript.lua", true))
 ]]
 
 queueteleport(TeleportString)
