@@ -1,22 +1,14 @@
--- Loadstring
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local kavo = shared.kavogui
+local entityLibrary = shared.vapeentity
+local FunctionsLibrary = shared.funcslib
 
--- Vars--
-local placeID = game.PlaceId
+local runcode = function(func)
+  func()
+end
 
-
-
-
--- Duels --
-local DuelsCombatSection = CombatTabDuels:NewSection("Combat")
-local DuelsBlantantSection = BlatantTabDuels:NewSection("Blantant")
-local DuelsUl = UiltlityTabDuels:NewSection("Uiltlity")
-local DuelsWorld = WorldTabDuels:NewSection("World")
--- Lobby
-local LobbyCombat = CombatTabLobby:NewSection("Combat")
-local LobbyBlantant = BlatantTabLobby:NewSection("Blantant")
-local LobbyUl = UiltlityTabLobby:NewSection("Uiltlity")
-local LobbyWorld = WorldTabLobby:NewSection("World")LobbyWorld = WorldTabLobby:NewSection("World")
+local runFunction = function(func)
+  func()
+end
 
 local InputService = game:GetService("UserInputService")
 local playersService = game:GetService("Players")
@@ -26,7 +18,7 @@ local mainchar = lplr.Character
 local replicatedStorageService = game:GetService("ReplicatedStorage")
 
 local bedwars = {}
-local bedwarsdata = {}
+local bedwarsData = {}
 
 local function isAlive(plr)
   plr = plr or lplr
@@ -89,8 +81,8 @@ local function getremote(tab)
 	end
 	return ""
 end
-
-local KnitClient = debug.getupvalue(require(lplr.PlayerScripts.TS.knit).setup, 6)
+runcode(function()
+	local KnitClient = debug.getupvalue(require(lplr.PlayerScripts.TS.knit).setup, 6)
 	local Client = require(game:GetService("ReplicatedStorage").TS.remotes).default.Client
 	local InventoryUtil = require(game:GetService("ReplicatedStorage").TS.inventory["inventory-util"]).InventoryUtil
 	bedwars = {
@@ -121,7 +113,8 @@ local KnitClient = debug.getupvalue(require(lplr.PlayerScripts.TS.knit).setup, 6
 		QueueMeta = require(replicatedStorageService.TS.game["queue-meta"]).QueueMeta,
 		SprintCont = KnitClient.Controllers.SprintController,
 		SwordController = KnitClient.Controllers.SwordController
-}
+	}
+end)
 
 local function targetCheck(plr, check)
 	return (check and plr.Character.Humanoid.Health > 0 and plr.Character:FindFirstChild("ForceField") == nil or check == false)
@@ -168,7 +161,6 @@ local function GetAllNearestHumanoidToPosition(distance, amount)
 	return returnedplayer -- table of attackable entities
 end
 
-
 local function playSound(id, volume) 
 	local sound = Instance.new("Sound")
 	sound.Parent = workspace
@@ -210,137 +202,173 @@ local function getCurrentSword()
 	return sword, swordslot
 end
 
--- Windows
-if placeID == 6872265039 then
- local LobbyWindow = Library.CreateLib("Bedwars -- Lobby", "Ocean")
-end
+local win = kavo:CreateWindow({
+  ["Title"] = "BedWarsCode"..(shared.BedWarsCodePrivate and " PRIVATE" or ""),
+  ["Theme"] = "Luna"
+})
 
-if placeID == 8560631822 then
- local GameWin1 = Library.CreateLib("Bedwars -- Duels Or Solos", "Ocean")
-end
-
-if placeID == 6872274481 then
- local GameWin2 = Library.CreateLib("Bedwars - Game", "Ocean")
-end
-
-if placeID == 8444591321 then
- local GameWin3 = Library.CreateLib("Bedwars - 30v30", "Ocean")
-end
-
--- Tabs --
--- Lobby
-local CombatTabLobby = LobbyWindow:NewTab("Combat")
-local BlatantTabLobby = LobbyWindow:NewTab("Blantant")
-local UtilityTabLobby = LobbyWindow:NewTab("Utility")
-local WorldTabLobby = LobbyWindow:NewTab("World")
--- Duels or Solos--
-local CombatTabDuels = GameWin1:NewTab("Combat")
-local RenderTabDuels = GameWin1:NewTab("Render")
-local UtilityTabDuels = GameWin1:NewTab("Utility")
-local WorldTabDuels = GameWin1:NewTab("World")
---Bedwars Doubles, Squads, LuckyBlock Squads, LuckyBlock Doubles, SkyWars Doubles
-local CombatTabDoubles = GameWin2:NewTab("Combat")
-local BlatantTabDoubles = GameWin2:NewTab("Blantant")
-local UtilityTabDoubles = GameWin2:NewTab("Utility")
-local WorldTabDoubles = GameWin2:NewTab("World")
--- 30v30
-local CombatTab = GameWin3:NewTab("Combat")
-local BlatantTab  = GameWin3:NewTab("Blantant")
-local UtilityTab = GameWin3:NewTab("Utility")
-local WorldTab = GameWin3:NewTab("World")
--- Game Checker --
-local GamesSupported = {
-    ["6872265039"] = true, --Bedwars Lobby
-    ["8560631822"] = true, --Bedwars Solos, Duels 2v2
-    ["6872274481"] = true, --Bedwars Doubles, Squads, LuckyBlock Squads, LuckyBlock Doubles, SkyWars Doubles
-    ["8444591321"] = true, --Bedwars 30vs30
-    ["855499080"] = true, --Skywars
+local Tabs = {
+  ["Combat"] = win.CreateTab("Combat"),
+  ["Blatant"] = win.CreateTab("Blatant"),
+  ["Render"] = win.CreateTab("Render"),
+  ["Utility"] = win.CreateTab("Utility"),
+  ["World"] = win.CreateTab("World")
 }
 
--- Code --
+local Sections = shared.SectionsLoaded
+Sections = {
+  ["HitFix"] = Tabs["Combat"].CreateSection("HitFix"),
+  ["NoClickDelay"] = Tabs["Combat"].CreateSection("NoClickDelay"),
+  ["Sprint"] = Tabs["Combat"].CreateSection("Sprint"),
+  ["Velocity"] = Tabs["Combat"].CreateSection("Velocity"),
+  ["InfiniteJump"] = Tabs["Blatant"].CreateSection("InfiniteJump"),
+  ["Killaura"] = Tabs["Blatant"].CreateSection("Killaura"),
+  ["NoFall"] = Tabs["Blatant"].CreateSection("NoFall"),
+  ["BreathExploit"] = Tabs["Utility"].CreateSection("BreathExploit"),
+  ["PartyExploit"] = Tabs["Utility"].CreateSection("PartyExploit"),
+  --["AntiVoid"] = Tabs["World"].CreateSection("AntiVoid"),
+  ["Breaker"] = Tabs["World"].CreateSection("Breaker")
+}
 
--- Lobby --
-LobbyCombat:NewToggle("Sprint", "Sprint = true", function(state)
-    if state then
-          task.spawn(function()
-					repeat
-					task.wait()
-					         	if (not bedwars.SprintCont.sprinting) then
-					       		bedwars.SprintCont:startSprinting()
-					      	   end
-				  	until (not Sprint.Enabled)
-	end)
-    else
-        bedwars.SprintCont:stopSprinting()
-    end
-end)
+local Settings = {
+	Velocity = false,
+	HitFix = false,
+	NoClickDelay = false,
+	Sprint = false,
+	["InfiniteJump"] = false,
+	Killaura = {
+	  Enabled = false,
+	  Range = 23,
+	  NoSwing = false,
+	  NoSound = false
+	},
+	NoFall = false,
+	BreathExploit = false,
+	PartyExploit = false,
+	AntiVoid = false,
+	Breaker = false
+}
 
--- Duels or Solos
-local func
-local func2
-DuelsCombatSection:NewToggle("No Knockback", "Removes knockback.", function(state)
-    if state then
-    func = bedwars.KnockbackUtil.applyKnockbackDirection
+runcode(function()
+	local func
+	local func2
+	local Velocity = {Enabled = false}
+	Velocity = Sections["Velocity"].CreateToggle({
+		Name = "Velocity",
+		Function = function(callback)
+			Velocity.Enabled = callback
+			if Velocity.Enabled then
+				Settings.Velocity = true
+				func = bedwars.KnockbackUtil.applyKnockbackDirection
 				func2 = bedwars.KnockbackUtil.applyKnockback
 				bedwars.KnockbackUtil.applyKnockbackDirection = function(...) end
 				bedwars.KnockbackUtil.applyKnockback = function(...) end
-    else
+			else
+				Settings.Velocity = false
 				bedwars.KnockbackUtil.applyKnockbackDirection = func
-				bedwars.KnockbackUtil.applyKnockback = func2 
-    end
+				bedwars.KnockbackUtil.applyKnockback = func2
+			end
+		end,
+		HoverText = "Remove knockbacks."
+	})
 end)
 
-
-DuelsCombatSection:NewButton("HitFix", "Fix's raycast shit and gives more reach.", function()
-    debug.setconstant(bedwars.SwordController.swingSwordAtMouse, 27, "raycast")
+runcode(function()
+	local HitFix = {Enabled = false}
+	HitFix = Sections["HitFix"].CreateToggle({
+		Name = "HitFix",
+		HoverText = "Fixes the raycast function used for extra reach",
+		Function = function(callback)
+			HitFix.Enabled = callback
+			if HitFix.Enabled then
+				Settings.HitFix = true
+				debug.setconstant(bedwars.SwordController.swingSwordAtMouse, 27, "raycast")
 				debug.setupvalue(bedwars.SwordController.swingSwordAtMouse, 4, bedwars.QueryUtil)
+			else
+				Settings.HitFix = false
+				debug.setconstant(bedwars.QueueCard.render, 9, 0.01)
+				debug.setconstant(bedwars.SwordController.swingSwordAtMouse, 27, "Raycast")
+			end
+		end
+	})
 end)
 
-DuelsCombatSection:NewToggle("ClickDelay", "No slow clicks.", function(state)
-    if state then
-         func = bedwars.SwordController.isClickingTooFast
-				     bedwars.SwordController.isClickingTooFast = function(self)
-				   	self.lastSwing = tick()
-					      return false
-        end
- else
-         bedwars.SwordController.isClickingTooFast = func
-   end
+runcode(function()
+	local func
+	local NoClickDelay = {Enabled = false}
+	NoClickDelay = Sections["NoClickDelay"].CreateToggle({
+		Name = "NoClickDelay",
+		Function = function(callback)
+			NoClickDelay.Enabled = callback
+			if NoClickDelay.Enabled then
+				Settings.NoClickDelay = true
+				func = bedwars.SwordController.isClickingTooFast
+				bedwars.SwordController.isClickingTooFast = function(self)
+					self.lastSwing = tick()
+					return false
+				end
+			else
+				Settings.NoClickDelay = false
+				bedwars.SwordController.isClickingTooFast = func
+			end
+		end,
+		HoverText = "Bypass cps limit."
+	})
 end)
 
-DuelsCombatSection:NewToggle("Sprint", "Sprint = true", function(state)
-    if state then
-          task.spawn(function()
+runcode(function()
+	local Sprint = {Enabled = false}
+	Sprint = Sections["Sprint"].CreateToggle({
+		Name = "Sprint",
+		Function = function(callback)
+			Sprint.Enabled = callback
+			if Sprint.Enabled then
+				Settings.Sprint = true
+				task.spawn(function()
 					repeat
-					task.wait()
-					         	if (not bedwars.SprintCont.sprinting) then
-					       		bedwars.SprintCont:startSprinting()
-					      	   end
-				  	until (not Sprint.Enabled)
-	end)
-    else
-        bedwars.SprintCont:stopSprinting()
-    end
+						task.wait()
+						if (not bedwars.SprintCont.sprinting) then
+							bedwars.SprintCont:startSprinting()
+						end
+					until (not Sprint.Enabled)
+				end)
+			else
+				Settings.Sprint = false
+				bedwars.SprintCont:stopSprinting()
+			end
+		end,
+		HoverText = "Set sprint to true."
+	})
 end)
 
-   local InfiniteJumpConnection
-   local InfJump = true
-   DuelsBlantantSection:NewToggle("Inf Jump", "Keep jumping.", function(state)
-    if state then
-        spawn(function()
+runFunction(function()
+  local InfiniteJumpConnection
+	local InfiniteJump = {Enabled = false}
+	local InfJump = true
+	InfiniteJump = Sections["InfiniteJump"].CreateToggle({
+		Name = "InfiniteJump",
+		Function = function(callback)
+			InfiniteJump.Enabled = callback
+	  	if InfiniteJump.Enabled then
+	  	  Settings["InfiniteJump"] = true
+	  	  spawn(function()
     			InfiniteJumpConnection = InputService.JumpRequest:connect(function(jump)
 		    		if InfJump then
 		    			mainchar:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
     				end
 		    	end)
 				end)
-    else
-       InfiniteJumpConnection:Disconnect() 
-    end
+			else
+			  Settings["InfiniteJump"] = false
+				InfiniteJumpConnection:Disconnect()
+			end
+		end,
+		HoverText = "Make you can jump any place"
+	})
 end)
 
-
-local KillauraNoSwing = {Enabled = false}
+runcode(function()
+	local KillauraNoSwing = {Enabled = false}
 	local KillauraNoSound = {Enabled = false}
 	local killaurarange = {Value = 23}
 	local Killaura = {Enabled = false}
@@ -378,42 +406,140 @@ local KillauraNoSwing = {Enabled = false}
 			end
 		end
 	end
-DuelsBlantantSection:NewToggle("Killaura", "u should know", function(state)
-    if state then
-       RunLoops:BindToHeartbeat("Killaura", 1, function()
+	Killaura = Sections["Killaura"].CreateToggle({
+		Name = "Killaura",
+		Function = function(callback)
+			Killaura.Enabled = callback
+			if Killaura.Enabled then
+				Settings.Killaura.Enabled = true
+				RunLoops:BindToHeartbeat("Killaura", 1, function()
 					local plrs = GetAllNearestHumanoidToPosition(killaurarange.Value - 0.0001, 1)
 					SwitchTool(getCurrentSword().tool)
 					for i,plr in pairs(plrs) do
 						task.spawn(attackEntity, plr)
 					end
-				end) 
-    else
-        RunLoops:UnbindFromHeartbeat("Killaura")
-    end
+				end)
+			else
+				Settings.Killaura.Enabled = false
+				RunLoops:UnbindFromHeartbeat("Killaura")
+			end
+		end,
+		HoverText = "Attack players/enemies that are near."
+	})
+	KillauraNoSound = Sections["Killaura"].CreateToggle({
+		Name = "No Sound",
+		Function = function(val)
+			Settings.Killaura.NoSound = val
+			KillauraNoSound.Enabled = val
+		end,
+		HoverText = "Removes the swinging sound."
+	})
+	KillauraNoSwing = Sections["Killaura"].CreateToggle({
+		Name = "No Swing",
+		Function = function(val)
+			Settings.Killaura.NoSwing = val
+			KillauraNoSwing.Enabled = val
+		end,
+		HoverText = "Removes the swinging animation."
+	})
 end)
-DuelsBlantantSection:NewToggle("NoFall", "", function(state)
-    if state then
-       task.spawn(function()
+
+runcode(function()
+	local NoFall = {Enabled = false}
+	NoFall = Sections["NoFall"].CreateToggle({
+		Name = "NoFall",
+		Function = function(callback)
+			NoFall.Enabled = callback
+			if NoFall.Enabled then
+				Settings.NoFall = true
+				task.spawn(function()
 					repeat
 						task.wait()
 						game:GetService("ReplicatedStorage").rbxts_include.node_modules["@rbxts"].net.out._NetManaged.GroundHit:FireServer()
 					until (not NoFall.Enabled)
-				end) 
-    else
-        print("E")
-    end
+				end)
+			else
+				Settings.NoFall = false
+			end
+		end,
+		HoverText = "Prevents taking fall damage."
+	})
 end)
 
-local antivoidpart
+--[[
+runFunction(function()
+	local Button = {Buttom = false}
+	Button = Sections["???"].CreateButton({
+		Name = "???",
+		Function = function()
+			
+		end
+	})
+end)
+--]]
+
+runFunction(function()
+  local BreathExploit = {Enabled = false}
+  BreathExploit = Sections["BreathExploit"].CreateToggle({
+		Name = "BreathExploit",
+		Function = function(callback)
+			BreathExploit.Enabled = callback
+			if BreathExploit.Enabled then
+				Settings.BreathExploit = true
+				task.spawn(function()
+					repeat
+						task.wait()
+						game:GetService("ReplicatedStorage").rbxts_include.node_modules:FindFirstChild("@rbxts").net.out._NetManaged.DragonBreath:FireServer({
+							["player"] = lplr
+						})
+					until (not BreathExploit.Enabled)
+				end)
+			else
+				Settings.BreathExploit = false
+			end
+		end,
+		HoverText = "Dragon Breath."
+	})
+end)
+
+runcode(function()
+	local PartyExploit = {Enabled = false}
+  PartyExploit = Sections["PartyExploit"].CreateToggle({
+		Name = "PartyExploit",
+		Function = function(callback)
+			PartyExploit.Enabled = callback
+		--	Settings.PartyExploit = callback
+			if PartyExploit.Enabled then
+				Settings.PartyExploit = true
+				task.spawn(function()
+					repeat
+						task.wait()
+						game:GetService("ReplicatedStorage")["events-@easy-games/game-core:shared/game-core-networking@getEvents.Events"].useAbility:FireServer("PARTY_POPPER")
+					until (not PartyExploit.Enabled)
+				end)
+			else
+				Settings.BreathExploit = false
+			end
+		end,
+		HoverText = "Spams confetti."
+	})
+end)
+
+--[[
+runcode(function()
+	local antivoidpart
 	local antivoidconnection
 	local antivoiding = false
 	local antitransparent = {Value = 50}
 	local anticolor = {["Hue"] = 0.44, ["Sat"] = 1, ["Value"] = 1}
 	local AntiVoid = {Enabled = false}
-      DuelsUl:NewToggle("AntiVoid", "", function(state)
-    if state then
-					task.spawn(function()
-			
+	AntiVoid = Sections["AntiVoid"].CreateToggle({
+		Name = "AntiVoid",
+		Function = function(callback)
+			AntiVoid.Enabled = callback
+			if AntiVoid.Enabled then
+				task.spawn(function()
+					Settings.AntiVoid = true
 					antivoidpart = Instance.new("Part")
 					antivoidpart.CanCollide = false
 					antivoidpart.Size = Vector3.new(10000, 1, 10000)
@@ -429,30 +555,151 @@ local antivoidpart
 								antivoiding = true
 								lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0, 150, 0)
 								antivoiding = false
-							   end
-						    end
-						end)
+							end
+						end
 					end)
-    else
-        if antivoidconnection then antivoidconnection:Disconnect() end
+				end)
+			else
+				Settings.AntiVoid = false
+				if antivoidconnection then antivoidconnection:Disconnect() end
 					if antivoidpart then
-	end					antivoidpart:Remove()
-    end
+						antivoidpart:Remove()
+					end
+				end
+			end,
+		HoverText = "Prevents falling in void\nit will create the part."
+	})
+	antitransparent = Sections["AntiVoid"].CreateSlider({
+		Name = "Transparency",
+		Min = 1,
+		Max = 100,
+		Default = 50,
+		Function = function(val)
+			antitransparent.Value = val
+			if antivoidpart then
+				antivoidpart.Transparency = 1 - (antitransparent.Value / 100)
+			end
+		end
+	})
+	anticolor = Sections["AntiVoid"].CreateColorPicker({
+		Name = "Color",
+		Default = Color3.fromHSV(anticolor["Hue"], anticolor["Sat"], anticolor["Value"]),
+		Function = function(col)
+			if antivoidpart then
+				antivoidpart.Color = col
+			end
+		end
+	})
 end)
-	
+--]]
 
-
---Bedwars Doubles, Squads, LuckyBlock Squads, LuckyBlock Doubles, SkyWars Doubles
-
-
--- 30v30
-
+runcode(function()
+  local params = RaycastParams.new()
+  params.IgnoreWater = true
+  function BreakFunction(part)
+    local raycastResult = game:GetService("Workspace"):Raycast(part.Position + Vector3.new(0,24,0),Vector3.new(0,-27,0),params)
+    if raycastResult then
+      local targetblock = raycastResult.Instance
+      for i,v in pairs(targetblock:GetChildren()) do
+        if v:IsA("Texture") then
+          v:Destroy()
+        end
+      end
+      replicatedStorageService.rbxts_include.node_modules["@easy-games"]["block-engine"].node_modules["@rbxts"].net.out._NetManaged.DamageBlock:InvokeServer({
+        ["blockRef"] = {
+          ["blockPosition"] = Vector3.new(math.round(targetblock.Position.X/3),math.round(targetblock.Position.Y/3),math.round(targetblock.Position.Z/3))
+        },
+        ["hitPosition"] = Vector3.new(math.round(targetblock.Position.X/3),math.round(targetblock.Position.Y/3),math.round(targetblock.Position.Z/3)),
+        ["hitNormal"] = Vector3.new(math.round(targetblock.Position.X/3),math.round(targetblock.Position.Y/3),math.round(targetblock.Position.Z/3))
+      })
+    end
+  end
+  function GetBeds()
+    local beds = {}
+    for i,v in pairs(game:GetService("Workspace"):GetChildren()) do
+      if string.lower(v.Name) == "bed" and v:FindFirstChild("Covers") ~= nil and v:FindFirstChild("Covers").BrickColor ~= lplr.Team.TeamColor then
+        table.insert(beds,v)
+      end
+    end
+    return beds
+  end
+  local BreakerRange = {Value = 30}
+  local Breaker = {Enabled = false}
+  Breaker = Sections["Breaker"].CreateToggle({
+    Name = "Breaker",
+    Function = function(callback)
+      Breaker.Enabled = callback
+      if Breaker.Enabled then
+        task.spawn(function()
+          while task.wait() do
+            if not Breaker.Enabled then return end
+            task.spawn(function()
+              if lplr:GetAttribute("DenyBlockBreak") == true then
+                lplr:SetAttribute("DenyBlockBreak",nil)
+              end
+            end)
+            if isAlive() then
+              local beds = GetBeds()
+              for i,v in pairs(beds) do
+                local mag = (v.Position - lplr.Character.PrimaryPart.Position).Magnitude
+                if mag < BreakerRange.Value then
+                  BreakFunction(v)
+                end
+              end
+            end
+          end
+        end)
+      else
+        Settings.Breaker = false
+      end
+    end
+  })
+end)
 spawn(function()
 	repeat
 	  wait(0.5)
-		writefile("BedWarsScript/Profiles/6872274481.json",game:GetService("HttpService"):JSONEncode(Settings))
+		writefile("BedwarsCode/Profiles/6872274481.json",game:GetService("HttpService"):JSONEncode(Settings))
 	until false
 end)
 local suc, res = pcall(function()
-	return game:GetService("HttpService"):JSONDecode(readfile("BedWarsScript/Profiles/6872274481.json"))
+	return game:GetService("HttpService"):JSONDecode(readfile("BedWarsCode/Profiles/6872274481.json"))
 end)
+ if suc and type(res) == "table" then 
+  Settings = res
+  if Velocity then
+  	Velocity.ToggleButton(Settings.Velocity)
+  end
+  if HitFix then
+  	HitFix.ToggleButton(Settings.HitFix)
+  end
+  if NoClickDelay then
+  	NoClickDelay.ToggleButton(Settings.NoClickDelay)
+  end
+  if Sprint then
+  	Sprint.ToggleButton(Settings.Sprint)
+  end
+  if Killaura then
+  	Killaura.ToggleButton(Settings.Killaura.Enabled)
+  end
+  if KillauraNoSound then
+  	KillauraNoSound.ToggleButton(Settings.Killaura.NoSound)
+  end
+  if KillauraNoSwing then
+  	KillauraNoSwing.ToggleButton(Settings.Killaura.NoSwing)
+  end
+  if NoFall then
+  	NoFall.ToggleButton(Settings.NoFall)
+  end
+  if BreathExploit then
+  	BreathExploit.ToggleButton(Settings.BreathExploit)
+  end
+  if PartyExploit then
+  	PartyExploit.ToggleButton(Settings.PartyExploit)
+  end
+  --if AntiVoid then
+  --	AntiVoid.ToggleButton(Settings.AntiVoid)
+  --end
+  if Breaker then
+  	Breaker.ToggleButton(Settings.Breaker)
+  end
+end
