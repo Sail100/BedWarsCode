@@ -8,7 +8,7 @@ local kavo
 if isfile("BedWarsCode/Libraries/kavo.lua") then
   kavo = loadstring(readfile("BedWarsCode/Libraries/kavo.lua"))()
 else
-  kavo = loadstring(game:HttpGet("https://raw.githubusercontent.com/NTDCore/NightbedForRoblox/main/Libraries/kavo.lua", true))()
+  kavo = loadstring(game:HttpGet("https://github.com/Sail100/BedWarsCode/blob/main/Libraries/kavo.lua", true))() 
 end
 shared.kavogui = kavo
 local Sections = {}
@@ -16,7 +16,7 @@ shared.SectionsLoaded = Sections
 
 local entityLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/Libraries/entityHandler.lua", true))()
 shared.vapeentity = entityLibrary
-local FunctionsLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/NTDCore/NightbedForRoblox/main/Libraries/FunctionsHandler.lua", true))()
+local FunctionsLibrary = loadstring(game:HttpGet("", true))()
 shared.funcslib = FunctionsLibrary
 
 local queueteleport = queue_on_teleport
