@@ -8,7 +8,7 @@ local kavo
 if isfile("BedWarsCode/Libraries/kavo.lua") then
   kavo = loadstring(readfile("BedWarsCode/Libraries/kavo.lua"))()
 else
-  kavo = loadstring(game:HttpGet("https://github.com/Sail100/BedWarsCode/blob/main/Libraries/kavo.lua", true))() 
+  kavo = loadstring(game:HttpGet("https://github.com/Sail100/BedWarsCode/blob/main/Libraries/kavo.lua/", true))() 
 end
 shared.kavogui = kavo
 local Sections = {}
